@@ -42,3 +42,4 @@ const app=express();
 app.listen(7777,()=>{
     console.log("hiii from server 3000");
 });
+
