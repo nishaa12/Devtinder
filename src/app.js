@@ -2,37 +2,37 @@ const express=require("express");
 
 const app=express();
 
+const connectDB=require("./config/database");
 
-//app.use("/home",(req,res)=>{
-   // res.send("hiii nishuuu");
-//});
-//app.use("/home123",(req,res)=>{
-    //res.send("hiii 123");
-//});
-
-//app.get("/test/:userid/:name/:password",(req,res)=>{
-    //console.log(req.params);
-    //res.send("hello from test");
-//});
-//app.get("/",(req,res)=>{
-    //res.send("hii ");
-//});
-const { adminauth } = require("./middlewares/auth.js");
-app.use("/admin",adminauth);
+const User=require("./models/user")
 
 
+app.post("/signup",async(req,res)=>{
+    const user=new User({
+     firstName:"Nisha",
+     lastName:"Bharti",
+     age:25,
+     password:"Nisha",
 
-//Route handlers
- app.get("/admin/getalldata",(req,res)=>{
-    res.send("send all data")
-     });
+    });
 
-app.get("/admin/deletealldata",(req,res)=>{
-    
-            res.send("deleted the user");
-          });
+    try{
+    await user.save();
+    res.send("User created");
+    }
+    catch(err){
+        res.status(400).send("user is not created"+err);
+    }
+});
 
-app.listen(7777,()=>{
+connectDB().then(()=>{
+    console.log("database connected succesfully");
+    app.listen(7777,()=>{
     console.log("hiii from server 3000");
 });
+})
+.catch((err)=>{
+    console.error("database cannot be connected")
+});
+
 
