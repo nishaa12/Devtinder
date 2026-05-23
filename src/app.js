@@ -22,25 +22,37 @@ app.post("/signup",async(req,res)=>{
 
 //get api
 
-app.get("/getapi",async(req,res)=>{
 
-    const userEmail=req.body.emailid;
-    
-    try{
-      const user = await User.find({emailid:userEmail});
-         res.send("user");    
-    }
-    catch(err){
-          res.status(400).send("user not found");
-
-    }
 
 
      
+app.get("/getapi", async (req, res) => {
+  
+    const userEmail = req.query.emailid;
+     try{
+    const user = await User.find({ emailid: userEmail });
+       res.send(user);
+  } catch (err) {
+     res.status(500).send("Server error");
+  }
 });
 
 
+//delete
 
+app.delete("/user",async(req,res)=>{
+    const userid=req.body._id;
+
+    try{
+        await User.findByIdAndDelete({_id:userid});
+         res.send("user deleted successfully");
+
+    }
+    catch(err){
+        res.status(400).send("something went wrong");
+    }
+
+});
 
 connectDB().then(()=>{
     console.log("database connected succesfully");
@@ -51,5 +63,8 @@ connectDB().then(()=>{
 .catch((err)=>{
     console.error("database cannot be connected")
 });
+
+
+
 
 
